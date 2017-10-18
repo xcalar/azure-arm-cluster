@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Xcalar Cluster",
+  "description": "This template deploys a multi VM Xcalar cluster",
+  "summary": "This template deploys a multi VM Xcalar cluster on CentOS 7.3",
+  "githubUsername": "xcalar-inc",
+  "dateUpdated": "2017-03-23"
+}

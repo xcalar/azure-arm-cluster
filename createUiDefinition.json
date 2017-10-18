@@ -1,0 +1,131 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Compute.MultiVm",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [
+            { "name": "licenseKey",
+              "type": "Microsoft.Common.TextBox",
+              "label": "License Key",
+              "defaultValue": "",
+              "toolTip": "Contact Xcalar at info@xcalar.com to request for a trial license if you don't have one. You may access Xcalar's customer portal at https://myxcalar.zendesk.com, to access your license keys.",
+              "constraints": { "required": true, "regex": "^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{173}[a-z=]{8}", "validationMessage": "Must specify a valid license key matching [ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{173}[a-z=]{8}" },
+              "options": {},
+              "visible": true
+            },
+            { "name": "scaleNumber",
+              "type": "Microsoft.Common.DropDown",
+              "label": "Number of nodes",
+              "defaultValue": "1",
+              "toolTip": "Xcalar Data Platform Standard Edition supports up to 16 nodes",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "1",
+                    "value": "1"
+                  },
+                  {
+                    "label": "2",
+                    "value": "2"
+                  },
+                  {
+                    "label": "3",
+                    "value": "3"
+                  },
+                  {
+                    "label": "4",
+                    "value": "4"
+                  },
+                  {
+                    "label": "5",
+                    "value": "5"
+                  },
+                  {
+                    "label": "6",
+                    "value": "6"
+                  },
+                  {
+                    "label": "7",
+                    "value": "7"
+                  },
+                  {
+                    "label": "8",
+                    "value": "8"
+                  },
+                  {
+                    "label": "9",
+                    "value": "9"
+                  },
+                  {
+                    "label": "10",
+                    "value": "10"
+                  },
+                  {
+                    "label": "11",
+                    "value": "11"
+                  },
+                  {
+                    "label": "12",
+                    "value": "12"
+                  },
+                  {
+                    "label": "13",
+                    "value": "13"
+                  },
+                  {
+                    "label": "14",
+                    "value": "14"
+                  },
+                  {
+                    "label": "15",
+                    "value": "15"
+                  },
+                  {
+                    "label": "16",
+                    "value": "16"
+                  }
+                ]
+              },
+              "options": {},
+              "visible": true
+            },
+            {
+              "name": "adminUsername",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Username",
+              "toolTip": "Enter username to be used for administrating the cluster",
+              "constraints": { "required": true, "regex":"^[A-Za-z][A-Za-z0-9_\\.-]+[A-Za-z0-9]$", "validationMessage": "Must be a valid user name matching ^[A-Z][A-Za-z0-9_\\.-]+[A-Za-z0-9]$" },
+              "options": {},
+              "visible": true
+            },
+            {
+              "name": "adminPassword",
+              "type": "Microsoft.Common.PasswordBox",
+              "label": {
+                "password": "Password",
+                "confirmPassword": "Confirm password"
+              },
+              "toolTip": "",
+              "constraints": { "required": true },
+              "options": { "hideConfirmation": false },
+              "visible": true
+            },
+            {
+              "name": "adminEmail",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Email address",
+              "toolTip": "Enter an email address with which notifications about the deployment will be sent",
+              "constraints": { "required": true, "regex":"^\\S+@\\S+[\\.][0-9a-z]+$", "validationMessage": "Must be a valid email address" },
+              "options": {},
+              "visible": true
+            }
+        ],
+        "steps": [],
+        "outputs": { "location": "[location()]",
+                     "licenseKey": "[basics('licenseKey')]",
+                     "scaleNumber": "[int(basics('scaleNumber'))]",
+                     "adminUsername": "[basics('adminUsername')]",
+                     "adminPassword": "[basics('adminPassword')]",
+                     "adminEmail": "[basics('adminEmail')]" }
+    }
+}
