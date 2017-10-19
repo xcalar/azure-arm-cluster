@@ -59,19 +59,6 @@ clean_fstab () {
 }
 
 create_swapunits () {
-    cat > /lib/systemd/system/mnt-resource-swapfile.swap <<EOF
-[Unit]
-Description=Turn on swap
-Requires=create-swapfile.service
-After=create-swapfile.service
-
-[Swap]
-What=$1/swapfile
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
 	cat > /lib/systemd/system/create-swapfile.service <<EOF
 [Unit]
 Description=Create a swapfile
@@ -84,6 +71,9 @@ EnvironmentFile=-/etc/default/swapfile
 ExecStart=-/usr/bin/fallocate -l \$SWAPSIZE $1/swapfile
 ExecStart=/usr/bin/chmod 600 $1/swapfile
 ExecStart=-/usr/sbin/mkswap $1/swapfile
+ExecStart=-/usr/sbin/swapon $1/swapfile
+ExecStop=-/usr/sbin/swapoff $1/swapfile
+ExecStop=-/usr/bin/rm -f $1/swapfile
 RemainAfterExit=true
 
 [Install]
@@ -91,9 +81,7 @@ WantedBy=multi-user.target
 EOF
     systemctl daemon-reload
     systemctl enable create-swapfile.service
-    systemctl enable mnt-resource-swapfile.swap
     systemctl restart create-swapfile.service
-    systemctl restart mnt-resource-swapfile.swap
 }
 
 create_xcalarunits () {
@@ -421,6 +409,8 @@ else
     mv /etc/xcalar/Caddyfile.$$ /etc/xcalar/Caddyfile
 fi
 
+# Custom SerDes path on local storage
+XCE_XDBSERDESPATH="${INSTANCESTORE}/serdes"
 # Generate /etc/xcalar/default.cfg
 (
 if [ $COUNT -eq 1 ]; then
@@ -431,8 +421,6 @@ fi
 # Enable ASUP on Cloud deployments
 echo Constants.SendSupportBundle=true
 
-# Custom SerDes path on local storage
-XCE_XDBSERDESPATH="${INSTANCESTORE}/serdes"
 mkdir -m 0700 -p $XCE_XDBSERDESPATH && \
 chown xcalar:xcalar $XCE_XDBSERDESPATH && \
 echo Constants.XdbLocalSerDesPath=$XCE_XDBSERDESPATH
